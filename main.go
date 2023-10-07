@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/andcto/crud-go/src/controller/routes"
 	"github.com/gin-gonic/gin"
@@ -15,7 +13,6 @@ func main() {
 	if err != nil {
 		log.Fatal("erro loading .env files")
 	}
-	fmt.Println(os.Getenv("TEST"))
 
 	router := gin.Default()
 
