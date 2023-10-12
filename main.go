@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	mongodb "github.com/andcto/crud-go/src/configuration/database"
 	"github.com/andcto/crud-go/src/configuration/logger"
 	"github.com/andcto/crud-go/src/controller"
 	"github.com/andcto/crud-go/src/controller/routes"
@@ -18,8 +17,6 @@ func main() {
 	if err != nil {
 		log.Fatal("erro loading .env files")
 	}
-
-	mongodb.InitConnection()
 
 	//Inicializar dependencias
 	service := service.NewUserDomainService()
