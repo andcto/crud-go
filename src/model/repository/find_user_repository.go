@@ -49,9 +49,9 @@ func (ur *userRepository) FindUserByEmail(
 	}
 
 	logger.Info("FindUserByEmail repository executed successfully",
-	zap.String("journey", "findUserByEmail"),
-	zap.String("email", email),
-	zap.String("userId", userEntity.ID.Hex()))
+		zap.String("journey", "findUserByEmail"),
+		zap.String("email", email),
+		zap.String("userId", userEntity.ID.Hex()))
 	return converter.ConvertEntityToDomain(*userEntity), nil
 }
 
@@ -83,14 +83,13 @@ func (ur *userRepository) FindUserByID(
 		}
 
 		errorMessage := "Error trying to find user by ID"
-		logger.Error(errorMessage, err
+		logger.Error(errorMessage, err,
 			zap.String("journey", "findUserByID"))
 		return nil, rest_err.NewInternalServerError(errorMessage)
 	}
 
 	logger.Info("findUserByID repository executed successfully",
-	zap.String("journey", "findUserByID"),
-	zap.String("userId", userEntity.ID.Hex()))
+		zap.String("journey", "findUserByID"),
+		zap.String("userId", userEntity.ID.Hex()))
 	return converter.ConvertEntityToDomain(*userEntity), nil
 }
-
