@@ -6,10 +6,7 @@ import (
 
 	mongodb "github.com/andcto/crud-go/src/configuration/database"
 	"github.com/andcto/crud-go/src/configuration/logger"
-	"github.com/andcto/crud-go/src/controller"
 	"github.com/andcto/crud-go/src/controller/routes"
-	"github.com/andcto/crud-go/src/model/repository"
-	"github.com/andcto/crud-go/src/model/service"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -27,10 +24,7 @@ func main() {
 		return
 	}
 
-	//Inicializar dependencias
-	repo := repository.NewUserRepository(database)
-	service := service.NewUserDomainService(repo)
-	userControler := controller.NewUserControllerInterface(service)
+	userControler := initDependencies(database)
 
 	router := gin.Default()
 
