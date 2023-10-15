@@ -24,11 +24,11 @@ func main() {
 		return
 	}
 
-	userControler := initDependencies(database)
+	userController := initDependencies(database)
 
 	router := gin.Default()
 
-	routes.InitRoutes(&router.RouterGroup, userControler)
+	routes.InitRoutes(&router.RouterGroup, userController)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatal(err)
