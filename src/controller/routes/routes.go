@@ -13,4 +13,6 @@ func InitRoutes(r *gin.RouterGroup,
 	r.POST("/createUser", userController.CreateUser)
 	r.PUT("/updateUser/:userId", userController.UpdateUser)
 	r.DELETE("/deleteUser/:userId", userController.DeleteUser)
+
+	r.Static("/index", "./src/html")
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Usuário</title>
+    <!-- Adicionando o Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Gerenciar Usuário</h1>
+        <div class="form-group">
+            <label for="searchEmail">E-mail:</label>
+            <input type="email" class="form-control" id="searchEmail" name="searchEmail" required>
+        </div>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-primary mr-2" onclick="buscarUsuario()">Buscar</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">Cancelar</button>
+        </div>
+
+        <div id="result" class="mt-4" style="display:none;">
+            <input type="hidden" id="userId">
+
+            <h2 class="text-center">Detalhes do Usuário</h2>
+
+            <p id="userId"></p>
+            <div class="form-group">
+                <label for="userNameInput">Nome:</label>
+                <input type="text" class="form-control" id="userNameInput">
+            </div>
+            <div class="form-group">
+                <label for="userAgeInput">Idade:</label>
+                <input type="text" class="form-control" id="userAgeInput">
+            </div>
+
+            <div class="text-center">
+                <button type="button" class="btn btn-success mr-2" onclick="atualizarUsuario()">Atualizar</button>
+                <button type="button" class="btn btn-danger" onclick="deletarUsuario()">Deletar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adicionando o Bootstrap JS e o jQuery (necessários para alguns recursos do Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function buscarUsuario() {
+            const searchEmail = document.getElementById('searchEmail').value;
+
+            try {
+                const response = await fetch(`http://localhost:8080/getUserByEmail/${searchEmail}`);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // Usuário não encontrado
+                        alert('Usuário não encontrado');
+                    } else {
+                        // Outro erro HTTP
+                        alert('Erro ao buscar usuário. Código de status: ' + response.status);
+                    }
+                    throw new Error('Erro na requisição');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('userId').value = data.id;
+
+                // Preenchendo os campos com os dados do usuário
+                document.getElementById('userNameInput').value = data.name;
+                document.getElementById('userAgeInput').value = data.age;
+            } catch (error) {
+                document.getElementById('result').style.display = 'none';
+                console.error('Erro ao buscar usuário:', error);
+            }
+        }
+
+        async function atualizarUsuario() {
+            const userId = document.getElementById('userId').value;
+            const newName = document.getElementById('userNameInput').value;
+            const newAge = document.getElementById('userAgeInput').value;
+
+            const updateData = {
+                name: newName,
+                age: parseInt(newAge),
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8080/updateUser/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updateData),
+                });
+
+                if (response.ok) {
+                    alert('Usuário atualizado com sucesso!');
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error('Erro na requisição PUT');
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar usuário:', error);
+            }
+        }
+
+        async function deletarUsuario() {
+            const userId = document.getElementById('userId').value;
+
+            try {
+                const response = await fetch(`http://localhost:8080/deleteUser/${userId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Usuário deletado com sucesso!');
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error('Erro na requisição DELETE');
+                }
+            } catch (error) {
+                console.error('Erro ao deletar usuário:', error);
+            }
+        }
+    </script>
+</body>
+</html>
